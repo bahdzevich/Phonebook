@@ -8,6 +8,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
  * @author Eugene Bogdevich
  * @version 1.0
  */
+@Component
 public class UserDetailServiceImpl implements UserDetailsService {
 
     private UserRepository userRepository;
@@ -30,6 +33,12 @@ public class UserDetailServiceImpl implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    /**
+     *
+     * @param email of User to be logged in.
+     * @return {@link org.springframework.security.core.userdetails.User}.
+     * @throws UsernameNotFoundException if email not found.
+     */
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -40,7 +49,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
                     .getRoles()
                     .parallelStream()
                     .map(role -> new SimpleGrantedAuthority(role.getName()))
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toCollection(HashSet::new));
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
         } else {
             throw new UsernameNotFoundException("User not found.");
