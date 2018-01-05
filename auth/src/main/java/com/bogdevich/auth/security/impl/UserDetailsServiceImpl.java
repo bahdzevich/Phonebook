@@ -1,6 +1,6 @@
-package com.bogdevich.auth.service.impl;
+package com.bogdevich.auth.security.impl;
 
-import com.bogdevich.auth.model.User;
+import com.bogdevich.auth.entity.domain.User;
 import com.bogdevich.auth.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
@@ -24,17 +23,16 @@ import java.util.stream.Collectors;
  * @version 1.0
  */
 @Component
-public class UserDetailServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements UserDetailsService {
 
     private UserRepository userRepository;
 
     @Autowired
-    public UserDetailServiceImpl(UserRepository userRepository) {
+    public UserDetailsServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     /**
-     *
      * @param email of User to be logged in.
      * @return {@link org.springframework.security.core.userdetails.User}.
      * @throws UsernameNotFoundException if email not found.
@@ -52,7 +50,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
                     .collect(Collectors.toCollection(HashSet::new));
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
         } else {
-            throw new UsernameNotFoundException("User not found.");
+            throw new UsernameNotFoundException(String.format("No user exists for \"%s\".", email));
         }
     }
 }

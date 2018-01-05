@@ -1,6 +1,6 @@
 package com.bogdevich.auth.repository;
 
-import com.bogdevich.auth.model.Role;
+import com.bogdevich.auth.entity.domain.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

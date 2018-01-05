@@ -1,7 +1,9 @@
-package com.bogdevich.auth.model;
+package com.bogdevich.auth.entity.domain;
+
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -19,7 +21,7 @@ import java.util.Set;
                 referencedColumnName = "id"
         )
 )
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,6 +31,7 @@ public class User {
     private String email;
 
     @Column(table = "password", name = "hash")
+    @JsonIgnore
     private String password;
 
     @Column(name = "name")
@@ -46,7 +49,8 @@ public class User {
     @Column(name = "room")
     private int room;
 
-    @ManyToMany
+    @JsonManagedReference
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -133,21 +137,20 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         User user = (User) o;
-        return room == user.room &&
-                Objects.equals(id, user.id) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(name, user.name) &&
-                Objects.equals(lastname, user.lastname) &&
-                Objects.equals(skype, user.skype) &&
-                Objects.equals(phone, user.phone) &&
-                Objects.equals(roles, user.roles);
+
+        if (id != null ? !id.equals(user.id) : user.id != null) return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        return phone != null ? phone.equals(user.phone) : user.phone == null;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, password, name, lastname, skype, phone, room, roles);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (phone != null ? phone.hashCode() : 0);
+        return result;
     }
 
     @Override

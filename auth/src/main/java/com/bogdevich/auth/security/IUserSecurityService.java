@@ -1,4 +1,4 @@
-package com.bogdevich.auth.service;
+package com.bogdevich.auth.security;
 
 /**
  * Service for security.
@@ -6,7 +6,7 @@ package com.bogdevich.auth.service;
  * @author Eugene Bogdevich
  * @version 1.0
  */
-public interface ISecurityService {
+public interface IUserSecurityService {
 
     /**
      * Find logged in users.

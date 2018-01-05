@@ -1,7 +1,9 @@
-package com.bogdevich.auth.model;
+package com.bogdevich.auth.entity.domain;
+
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
-import java.util.Objects;
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -12,7 +14,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "role")
-public class Role {
+public class Role implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +23,11 @@ public class Role {
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
+    @JsonBackReference
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            mappedBy = "roles"
+    )
     private Set<User> users;
 
     public Role() {
@@ -45,25 +51,6 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Role role = (Role) o;
-        return Objects.equals(id, role.id) &&
-                Objects.equals(name, role.name) &&
-                Objects.equals(users, role.users);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, users);
     }
 
     @Override

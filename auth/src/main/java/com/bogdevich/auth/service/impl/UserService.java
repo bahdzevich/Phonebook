@@ -1,14 +1,17 @@
 package com.bogdevich.auth.service.impl;
 
-import com.bogdevich.auth.model.Role;
-import com.bogdevich.auth.model.User;
+import com.bogdevich.auth.entity.domain.Role;
+import com.bogdevich.auth.entity.domain.User;
 import com.bogdevich.auth.repository.RoleRepository;
 import com.bogdevich.auth.repository.UserRepository;
 import com.bogdevich.auth.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Optional;
@@ -25,9 +28,9 @@ public class UserService implements IUserService {
 
     private final String DEFAULT_ROLE_NAME = "EMPLOYEE";
 
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
@@ -36,12 +39,8 @@ public class UserService implements IUserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    /**
-     * Save new {@link User}.
-     * @param user {@link User} object to be saved.
-     * @return {@link Optional} contains {@link User} object.
-     */
     @Override
+    @Transactional
     public Optional<User> save(User user) {
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
@@ -53,13 +52,20 @@ public class UserService implements IUserService {
         return Optional.ofNullable(userRepository.save(user));
     }
 
-    /**
-     * Find {@link User} by email.
-     * @param email of User.
-     * @return {@link Optional}
-     */
     @Override
+    @Transactional
     public Optional<User> findByEmail(String email) {
         return userRepository.findUserByEmail(email);
+    }
+
+    @Override
+    @Transactional
+    public Optional<User> findUserByID(Long ID) {
+        return Optional.ofNullable(userRepository.findOne(ID));
+    }
+
+    @Override
+    public Optional<Role> findRoleByID(Long ID) {
+        return Optional.ofNullable(roleRepository.findOne(ID));
     }
 }
