@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -27,6 +28,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
  */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Value("${security.signing-key}")
@@ -35,6 +37,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Value("${security.encoding-strength}")
     private String encodingStrength;
 
+    /**
+     * The security realm name is defined in securityRealm property.
+     * This name is arbitrary. A realm is basically all that define our security solution
+     * from provider, to roles, to users, etc.
+     */
     @Value("${security.security-realm}")
     private String securityRealm;
 
@@ -77,7 +84,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(workload);
     }
 
-    @Bean
+    @Bean(name = "jwtAccessTokenConverter")
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
         jwtAccessTokenConverter.setSigningKey(signingKey);
