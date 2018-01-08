@@ -69,11 +69,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .httpBasic().realmName(securityRealm)
+                .httpBasic()
+                .realmName(securityRealm)
                 .and()
-                .csrf().disable();
+                .csrf()
+                .disable();
     }
 
     @Bean

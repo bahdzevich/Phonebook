@@ -39,7 +39,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        super.configure(resources);
+        resources.resourceId(resourceIds).tokenServices(tokenServices);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .requestMatchers()
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/actuator/**", "/api-docs/**").permitAll()
-                    .antMatchers("/api/**").authenticated();
+                .antMatchers("/actuator/**", "/api-docs/**").permitAll()
+                .antMatchers("/phonebook/v1/**").authenticated();
     }
 }

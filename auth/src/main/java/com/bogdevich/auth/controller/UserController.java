@@ -6,6 +6,7 @@ import com.bogdevich.auth.entity.domain.User;
 import com.bogdevich.auth.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -30,6 +31,7 @@ public class UserController {
             method = RequestMethod.GET,
             produces = {"application/json"}
     )
+    @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseBody
     public ResponseEntity<User> getUserByID(@PathVariable("id") Long id) throws NotFoundException{
         User user = userService
