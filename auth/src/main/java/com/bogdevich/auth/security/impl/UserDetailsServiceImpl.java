@@ -2,6 +2,8 @@ package com.bogdevich.auth.security.impl;
 
 import com.bogdevich.auth.entity.domain.User;
 import com.bogdevich.auth.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,6 +27,8 @@ import java.util.stream.Collectors;
  */
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
+
+    private final Logger logger = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
     private UserRepository userRepository;
 
@@ -38,18 +43,21 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * @throws UsernameNotFoundException if email not found.
      */
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        logger.debug(String.format("Load user by user name: \"%s\"", email));
         Optional<User> userOptional = userRepository.findUserByEmail(email);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            Set<GrantedAuthority> grantedAuthorities = user
+            logger.debug(String.format("Load user by user name: %s", user));
+            List<GrantedAuthority> grantedAuthorities = user
                     .getRoles()
-                    .parallelStream()
+                    .stream()
                     .map(role -> new SimpleGrantedAuthority(role.getName()))
-                    .collect(Collectors.toCollection(HashSet::new));
+                    .collect(Collectors.toList());
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
         } else {
+            logger.debug("Load user by user name: user not found");
             throw new UsernameNotFoundException(String.format("No user exists for \"%s\".", email));
         }
     }
