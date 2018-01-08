@@ -23,12 +23,12 @@ public class Role implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @JsonBackReference
+/*    @JsonBackReference
     @ManyToMany(
             fetch = FetchType.LAZY,
             mappedBy = "roles"
     )
-    private Set<User> users;
+    private Set<User> users;*/
 
     public Role() {
     }
@@ -41,9 +41,9 @@ public class Role implements Serializable {
         return name;
     }
 
-    public Set<User> getUsers() {
+    /*public Set<User> getUsers() {
         return users;
-    }
+    }*/
 
     public void setId(Long id) {
         this.id = id;
@@ -58,7 +58,7 @@ public class Role implements Serializable {
         return "Role{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", users=" + users +
+                /*", users=" + users +*/
                 '}';
     }
 }
