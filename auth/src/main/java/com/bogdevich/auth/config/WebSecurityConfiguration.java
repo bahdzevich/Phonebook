@@ -50,6 +50,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private UserDetailsService userDetailsService;
 
+    /**
+     * Injected with a custom implementation of UserDetailsService.
+     */
     @Autowired
     protected WebSecurityConfiguration(UserDetailsService userDetailsService) {
         super();
@@ -84,6 +87,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder(workload);
     }
 
+    /**
+     * To enable the resource server to decode access tokens
+     * an {@link JwtAccessTokenConverter} bean must be used by both servers.
+     *
+     * @return {@link JwtAccessTokenConverter}
+     */
     @Bean(name = "jwtAccessTokenConverter")
     public JwtAccessTokenConverter jwtAccessTokenConverter() {
         JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
@@ -91,6 +100,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return jwtAccessTokenConverter;
     }
 
+    /**
+     *  A JwtTokenStore bean is needed by the authorization server.
+     *
+     * @return {@link JwtTokenStore}
+     */
     @Bean
     public TokenStore tokenStore() {
         return new JwtTokenStore(jwtAccessTokenConverter());
