@@ -1,6 +1,6 @@
 package com.bogdevich.auth.controller;
 
-import com.bogdevich.auth.controller.exception.NotFoundException;
+import com.bogdevich.auth.controller.exception.DataNotFoundException;
 import com.bogdevich.auth.entity.domain.Role;
 import com.bogdevich.auth.entity.domain.User;
 import com.bogdevich.auth.service.IUserService;
@@ -33,10 +33,10 @@ public class UserController {
     )
     @PreAuthorize("hasAuthority('ADMIN')")
     @ResponseBody
-    public ResponseEntity<User> getUserByID(@PathVariable("id") Long id) throws NotFoundException{
+    public ResponseEntity<User> getUserByID(@PathVariable("id") Long id) throws DataNotFoundException {
         User user = userService
                 .findUserByID(id)
-                .orElseThrow(() -> new NotFoundException("User not found"));
+                .orElseThrow(() -> new DataNotFoundException("User not found"));
         return ResponseEntity.ok(user);
     }
 
@@ -46,10 +46,10 @@ public class UserController {
             produces = {"application/json"}
     )
     @ResponseBody
-    public ResponseEntity<Role> getRoleByID(@PathVariable("id") Long id) throws NotFoundException{
+    public ResponseEntity<Role> getRoleByID(@PathVariable("id") Long id) throws DataNotFoundException {
         Role role = userService
                 .findRoleByID(id)
-                .orElseThrow(() -> new NotFoundException("Role not found"));
+                .orElseThrow(() -> new DataNotFoundException("Role not found"));
         return ResponseEntity.ok(role);
     }
 }

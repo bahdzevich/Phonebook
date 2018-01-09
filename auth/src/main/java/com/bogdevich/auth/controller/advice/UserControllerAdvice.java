@@ -1,7 +1,7 @@
 package com.bogdevich.auth.controller.advice;
 
 import com.bogdevich.auth.controller.UserController;
-import com.bogdevich.auth.controller.exception.NotFoundException;
+import com.bogdevich.auth.controller.exception.DataNotFoundException;
 import com.bogdevich.auth.entity.dto.ExceptionMessageDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @ControllerAdvice(basePackageClasses = UserController.class)
 public class UserControllerAdvice extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(NotFoundException.class)
+    @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<ExceptionMessageDTO> handleNotFoundException(Throwable ex){
         ExceptionMessageDTO messageDTO = new ExceptionMessageDTO();
         messageDTO.setTime(LocalDateTime.now().toString());
