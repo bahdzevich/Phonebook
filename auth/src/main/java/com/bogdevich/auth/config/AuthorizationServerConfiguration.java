@@ -67,10 +67,10 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
         clients
                 .inMemory()
                     .withClient(clientId)
-                    .secret(clientSecret)
-                    .authorizedGrantTypes(grantType)
-                    .scopes(scopeRead, scopeWrite)
-                    .resourceIds(resourceIds);
+                        .secret(clientSecret)
+                        .authorizedGrantTypes(grantType)
+                        .scopes(scopeRead, scopeWrite)
+                        .resourceIds(resourceIds);
     }
 
     @Override
