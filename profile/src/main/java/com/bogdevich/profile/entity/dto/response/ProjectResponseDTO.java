@@ -1,16 +1,16 @@
-package com.bogdevich.profile.entity.dto;
+package com.bogdevich.profile.entity.dto.response;
 
 /**
  * POJO class for {@link com.bogdevich.profile.entity.domain.Project}
  *
  * @author Eugene Bogdevich
  */
-public class ProjectDTO {
+public class ProjectResponseDTO {
 
     private Long id;
     private String name;
 
-    public ProjectDTO() {
+    public ProjectResponseDTO() {
     }
 
     public Long getId() {
@@ -34,7 +34,7 @@ public class ProjectDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ProjectDTO that = (ProjectDTO) o;
+        ProjectResponseDTO that = (ProjectResponseDTO) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         return name != null ? name.equals(that.name) : that.name == null;

@@ -1,4 +1,4 @@
-package com.bogdevich.profile.entity.dto;
+package com.bogdevich.profile.entity.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -19,8 +19,8 @@ public class ProfileResponseDTO {
     private String skype;
     private String phone;
     private int room;
-    private Set<RoleDTO> roles;
-    private Set<ProjectDTO> projects;
+    private Set<RoleResponseDTO> roles;
+    private Set<ProjectResponseDTO> projects;
 
     public ProfileResponseDTO() {
     }
@@ -57,11 +57,11 @@ public class ProfileResponseDTO {
         return room;
     }
 
-    public Set<RoleDTO> getRoles() {
+    public Set<RoleResponseDTO> getRoles() {
         return roles;
     }
 
-    public Set<ProjectDTO> getProjects() {
+    public Set<ProjectResponseDTO> getProjects() {
         return projects;
     }
 
@@ -97,11 +97,11 @@ public class ProfileResponseDTO {
         this.room = room;
     }
 
-    public void setRoles(Set<RoleDTO> roles) {
+    public void setRoles(Set<RoleResponseDTO> roles) {
         this.roles = roles;
     }
 
-    public void setProjects(Set<ProjectDTO> projects) {
+    public void setProjects(Set<ProjectResponseDTO> projects) {
         this.projects = projects;
     }
 

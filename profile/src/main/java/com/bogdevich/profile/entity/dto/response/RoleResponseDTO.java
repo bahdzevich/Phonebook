@@ -1,17 +1,15 @@
-package com.bogdevich.profile.entity.dto;
-
-import java.util.Set;
+package com.bogdevich.profile.entity.dto.response;
 
 /**
  * POJO class for {@link com.bogdevich.profile.entity.domain.Role} transfer.
  *
  * @author Eugene Bogdevich
  */
-public class RoleDTO {
+public class RoleResponseDTO {
     private Long id;
     private String name;
 
-    public RoleDTO() {
+    public RoleResponseDTO() {
     }
 
     public Long getId() {
@@ -35,10 +33,10 @@ public class RoleDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        RoleDTO roleDTO = (RoleDTO) o;
+        RoleResponseDTO roleResponseDTO = (RoleResponseDTO) o;
 
-        if (id != null ? !id.equals(roleDTO.id) : roleDTO.id != null) return false;
-        return name != null ? name.equals(roleDTO.name) : roleDTO.name == null;
+        if (id != null ? !id.equals(roleResponseDTO.id) : roleResponseDTO.id != null) return false;
+        return name != null ? name.equals(roleResponseDTO.name) : roleResponseDTO.name == null;
     }
 
     @Override
