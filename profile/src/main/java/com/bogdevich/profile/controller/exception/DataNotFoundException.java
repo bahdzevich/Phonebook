@@ -6,7 +6,7 @@ package com.bogdevich.profile.controller.exception;
  *
  * @author Eugene Bogdevich
  */
-public class DataNotFoundException extends Exception {
+public class DataNotFoundException extends RuntimeException {
     public DataNotFoundException() {
         super();
     }
