@@ -1,6 +1,6 @@
 package com.bogdevich.profile.service;
 
-import com.bogdevich.profile.entity.dto.ProfileDTO;
+import com.bogdevich.profile.entity.domain.Profile;
 
-public interface IProfileService extends ICrudService<ProfileDTO>{
+public interface IProfileService extends ICrudService<Profile>{
 }
