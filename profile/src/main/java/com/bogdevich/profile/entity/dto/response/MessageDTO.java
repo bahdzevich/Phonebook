@@ -1,8 +1,9 @@
-package com.bogdevich.profile.entity.dto;
+package com.bogdevich.profile.entity.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.util.Objects;
+import java.util.List;
+
 
 /**
  * Simple POJO for representing exception message.
@@ -16,7 +17,8 @@ public class MessageDTO {
     private int status;
     private String message;
     private String path;
-    private Object body;
+    private List<FieldErrorDTO> errors;
+    private List<ErrorDTO> globalErrors;
 
     public MessageDTO() {
     }
@@ -53,11 +55,19 @@ public class MessageDTO {
         this.path = path;
     }
 
-    public Object getBody() {
-        return body;
+    public List<FieldErrorDTO> getErrors() {
+        return errors;
     }
 
-    public void setBody(Object body) {
-        this.body = body;
+    public void setErrors(List<FieldErrorDTO> errors) {
+        this.errors = errors;
+    }
+
+    public List<ErrorDTO> getGlobalErrors() {
+        return globalErrors;
+    }
+
+    public void setGlobalErrors(List<ErrorDTO> globalErrors) {
+        this.globalErrors = globalErrors;
     }
 }
