@@ -1,5 +1,8 @@
 package com.bogdevich.profile.entity.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FieldErrorDTO {
     String field;
     String code;

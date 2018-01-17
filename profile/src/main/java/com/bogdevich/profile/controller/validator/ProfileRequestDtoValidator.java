@@ -6,6 +6,7 @@ import com.bogdevich.profile.entity.dto.request.ProfileRequestDTO;
 import com.bogdevich.profile.repository.ProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -19,6 +20,9 @@ public class ProfileRequestDtoValidator implements Validator {
     private final String NAME_REGEX = "^([A-Z][a-z]*)(['-][A-Z][a-z]*)*$";
     private final String SKYPE_REGEX = "^([A-Za-z\\d]+)([-. ][A-Za-z\\d]+)*$";
     private final String PHONE_REGEX = "^(\\+375(25|29|33|44)\\d{7})$";
+
+    @Value("profile.exists")
+    private String PROFILE_EXISTS;
 
     private ProfileRepository profileRepository;
     private ProfileRequestMapper profileRequestMapper;
@@ -40,17 +44,19 @@ public class ProfileRequestDtoValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
 
-/*        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "profile.empty.email");
+        /*
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "email", "profile.empty.email");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "profile.empty.name");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "lastname", "profile.empty.lastname");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "skype", "profile.empty.skype");
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "phone", "profile.empty.phone");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "room", "profile.empty.room");*/
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "room", "profile.empty.room");
+        */
 
         ProfileRequestDTO profileRequestDTO = (ProfileRequestDTO) target;
         Profile profile = profileRequestMapper.dtoToProfile(profileRequestDTO);
         if (profileRepository.exists(Example.of(profile))) {
-            errors.reject("profile.exists");
+            errors.reject(PROFILE_EXISTS);
         }
     }
 }

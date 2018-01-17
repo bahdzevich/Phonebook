@@ -1,4 +1,6 @@
 package com.bogdevich.profile.service;
 
-public interface IRoleService {
+import com.bogdevich.profile.entity.domain.Role;
+
+public interface IRoleService extends ICrudService<Role> {
 }

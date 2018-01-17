@@ -3,6 +3,7 @@ package com.bogdevich.profile.entity.dto.request;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.validation.constraints.Min;
 
@@ -14,7 +15,7 @@ import javax.validation.constraints.Min;
 public class ProfileRequestDTO {
     @Email
     private String email;
-    @NotBlank
+    @NotBlank(message = "profile.empty.name")
     private String name;
     @NotBlank
     private String lastname;
