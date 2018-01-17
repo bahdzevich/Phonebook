@@ -18,7 +18,7 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
  * (Due to some limitations of Spring Framework).
  * You need to tell Spring Boot to set OAuth2 request filter order to 3
  * to align with the hardcoded value. You do that
- * by adding security.oauth2.resource.filter-order = 3 in the application.properties file.
+ * by adding security.oauth2.resource.filter-order = 3 in the security.properties file.
  *
  * @author Eugene Bogdevich
  */

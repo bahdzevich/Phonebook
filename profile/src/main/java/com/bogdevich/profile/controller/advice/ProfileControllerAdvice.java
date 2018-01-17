@@ -18,6 +18,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
@@ -38,26 +39,38 @@ import java.util.stream.Collectors;
         })
 public class ProfileControllerAdvice extends ResponseEntityExceptionHandler{
 
-        private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-        @ExceptionHandler(DataNotFoundException.class)
-        public ResponseEntity<MessageDTO> handleNotFoundException(Throwable ex){
-                MessageDTO messageDTO = new MessageDTO();
-                messageDTO.setTime(LocalDateTime.now().toString());
-                messageDTO.setStatus(HttpStatus.NOT_FOUND.value());
-                messageDTO.setMessage(ex.getMessage());
-                return new ResponseEntity<>(messageDTO, HttpStatus.NOT_FOUND);
-        }
+    @ExceptionHandler(DataNotFoundException.class)
+    public ResponseEntity<MessageDTO> handleNotFoundException(Throwable ex){
+        logger.warn(ex.getMessage(), ex);
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setTime(LocalDateTime.now().toString());
+        messageDTO.setStatus(HttpStatus.NOT_FOUND.value());
+        messageDTO.setMessage(ex.getMessage());
+        return new ResponseEntity<>(messageDTO, HttpStatus.NOT_FOUND);
+    }
 
-        @ExceptionHandler(InternalServiceException.class)
-        public ResponseEntity<MessageDTO> handleInternalServiceException(Throwable ex, HttpServletRequest httpServletRequest) {
-                MessageDTO messageDTO = new MessageDTO();
-                messageDTO.setTime(LocalDateTime.now().toString());
-                messageDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-                messageDTO.setMessage(ex.getMessage());
-                messageDTO.setPath(httpServletRequest.getRequestURI());
-                return new ResponseEntity<>(messageDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    @ExceptionHandler(InternalServiceException.class)
+    public ResponseEntity<MessageDTO> handleInternalServiceException(Throwable ex, HttpServletRequest httpServletRequest) {
+        logger.warn(ex.getMessage(), ex);
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setTime(LocalDateTime.now().toString());
+        messageDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        messageDTO.setMessage(ex.getMessage());
+        messageDTO.setPath(httpServletRequest.getRequestURI());
+        return new ResponseEntity<>(messageDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<MessageDTO> handleMethodArgumentTypeMismatchException(
+        MethodArgumentTypeMismatchException ex) {
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setTime(LocalDateTime.now().toString());
+        messageDTO.setStatus(HttpStatus.BAD_REQUEST.value());
+        messageDTO.setMessage(String.format("There is invalid value type for \'%s\' parameter.", ex.getParameter().getParameterName()));
+        return new ResponseEntity<>(messageDTO, HttpStatus.BAD_REQUEST);
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
