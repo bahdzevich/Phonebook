@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Crud service interface.
+ * Crud impl interface.
  *
  * @param <T> data transfer object.
  * @author Eugene Bogdevich

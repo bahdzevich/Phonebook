@@ -25,6 +25,19 @@ public class ProfileResponseDTO {
     public ProfileResponseDTO() {
     }
 
+    public ProfileResponseDTO(Long id, String email, String password, String name, String lastname, String skype, String phone, int room, Set<RoleResponseDTO> roles, Set<ProjectResponseDTO> projects) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.lastname = lastname;
+        this.skype = skype;
+        this.phone = phone;
+        this.room = room;
+        this.roles = roles;
+        this.projects = projects;
+    }
+
     public Long getId() {
         return id;
     }

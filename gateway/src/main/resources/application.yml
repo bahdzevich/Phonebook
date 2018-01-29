@@ -1,17 +1,49 @@
-spring:
-  application:
-    name: gateway
+server:
+  port: 9090
+info:
+  component: Zuul Server
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
 zuul:
   ignored-services: '*'
   host:
     connect-timeout-millis: 20000
     socket-timeout-millis: 20000
   routes:
-    profile-service:
-      path: /phonebook/v1/api/profiles/**
-      serviceId: profile-service
+    auth-service:
+      path: /phonebook/api/uaa/**
+      serviceId: auth-service
       stripPrefix: false
-      sensitiveHeaders:
+    profile-service:
+      path: /phonebook/api/profiles/**
+      serviceId: profile-service
+      stripPrefix: false # needed because of setting context path
+      sensitiveHeaders: Authorization
+    news-service:
+      path: /phonebook/api/news/**
+      serviceId: news-service
+      stripPrefix: false
+      sensitiveHeaders: Authorization
+security:
+  oauth2:
+    sso:
+      home:
+        secure: false
+        path: /,/**/*.html
+    resource:
+      user-info-uri: http://localhost:10000/phonebook/api/uaa/users/current
+    client:
+      access-token-uri: http://localhost:10000/phonebook/api/uaa/oauth/token
+      user-authorization-uri: http://localhost:10000/phonebook/api/uaa/oauth/token
 
-server:
-  port: 4000

@@ -23,6 +23,15 @@ public class MessageDTO {
     public MessageDTO() {
     }
 
+    public MessageDTO(String time, int status, String message, String path, List<FieldErrorDTO> errors, List<ErrorDTO> globalErrors) {
+        this.time = time;
+        this.status = status;
+        this.message = message;
+        this.path = path;
+        this.errors = errors;
+        this.globalErrors = globalErrors;
+    }
+
     public String getTime() {
         return time;
     }

@@ -12,6 +12,11 @@ public class RoleResponseDTO {
     public RoleResponseDTO() {
     }
 
+    public RoleResponseDTO(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

@@ -13,6 +13,13 @@ import java.util.Optional;
 public interface ProfileRepository extends JpaRepository<Profile, Long>{
     Optional<Profile> findByEmail(String email);
 
+    /**
+     * String "\n#pageable\n" is required for pagination query.
+     *
+     * @param projectID - identification project number.
+     * @param pageable - object with values of page number and page limit
+     * @return {@link Page<Profile>}
+     */
     @Query(
             value = "" +
                     "SELECT `user`.id, `user`.name, `user`.lastname, `user`.email, `user`.skype, `user`.phone, `user`.room " +

@@ -1,7 +1,7 @@
 package com.bogdevich.profile.controller.advice;
 
-import com.bogdevich.profile.controller.ProfileController;
-import com.bogdevich.profile.controller.ProjectController;
+import com.bogdevich.profile.controller.ProfileRestController;
+import com.bogdevich.profile.controller.ProjectRestController;
 import com.bogdevich.profile.controller.RoleController;
 import com.bogdevich.profile.controller.exception.DataNotFoundException;
 import com.bogdevich.profile.controller.exception.InternalServiceException;
@@ -33,8 +33,8 @@ import java.util.stream.Collectors;
  */
 @ControllerAdvice(
         basePackageClasses = {
-                ProfileController.class,
-                ProjectController.class,
+                ProfileRestController.class,
+                ProjectRestController.class,
                 RoleController.class
         })
 public class ProfileControllerAdvice extends ResponseEntityExceptionHandler{

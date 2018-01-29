@@ -13,6 +13,11 @@ public class ProjectResponseDTO {
     public ProjectResponseDTO() {
     }
 
+    public ProjectResponseDTO(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }
