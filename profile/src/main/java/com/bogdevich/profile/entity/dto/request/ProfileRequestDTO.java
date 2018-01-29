@@ -5,7 +5,10 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Value;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 /**
  * POJO class for {@link com.bogdevich.profile.entity.domain.Profile} api request.
@@ -13,17 +16,32 @@ import javax.validation.constraints.Min;
  * @author Eugene Bogdevich
  */
 public class ProfileRequestDTO {
+    @NotBlank
     @Email
+    @Size(max = 255)
     private String email;
-    @NotBlank(message = "profile.empty.name")
+
+    @NotBlank
+    @Size(max = 45)
+    @Pattern(regexp = "^([A-Z][a-z]*)(['-][A-Z][a-z]*)*$")
     private String name;
+
     @NotBlank
+    @Size(max = 45)
+    @Pattern(regexp = "^([A-Z][a-z]*)(['-][A-Z][a-z]*)*$")
     private String lastname;
+
     @NotBlank
+    @Size(max = 45)
+    @Pattern(regexp = "^([A-Za-z\\d]+)([-. ][A-Za-z\\d]+)*$")
     private String skype;
-    @NotBlank
+
+    @NotBlank(message = "")
+    @Pattern(regexp = "^(\\+375(25|29|33|44)\\d{7})$")
     private String phone;
-    @Min(0)
+
+    @Min(value = 0)
+    @Max(value = 99999)
     private int room;
 
     public ProfileRequestDTO() {

@@ -3,11 +3,15 @@ package com.bogdevich.auth.controller;
 import com.bogdevich.auth.controller.exception.DataNotFoundException;
 import com.bogdevich.auth.entity.domain.Role;
 import com.bogdevich.auth.entity.domain.User;
-import com.bogdevich.auth.service.IUserService;
+import com.bogdevich.auth.security.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 /**
  * Controller provides with user api.
@@ -16,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
  * @version 1.0
  */
 @RestController
-@RequestMapping("/phonebook/v1/users")
+@RequestMapping("/users")
 public class UserController {
 
     private IUserService userService;
@@ -26,30 +30,8 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(
-            value = "/{id}",
-            method = RequestMethod.GET,
-            produces = {"application/json"}
-    )
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @ResponseBody
-    public ResponseEntity<User> getUserByID(@PathVariable("id") Long id) throws DataNotFoundException {
-        User user = userService
-                .findUserByID(id)
-                .orElseThrow(() -> new DataNotFoundException("User not found"));
-        return ResponseEntity.ok(user);
-    }
-
-    @RequestMapping(
-            value = "/roles/{id}",
-            method = RequestMethod.GET,
-            produces = {"application/json"}
-    )
-    @ResponseBody
-    public ResponseEntity<Role> getRoleByID(@PathVariable("id") Long id) throws DataNotFoundException {
-        Role role = userService
-                .findRoleByID(id)
-                .orElseThrow(() -> new DataNotFoundException("Role not found"));
-        return ResponseEntity.ok(role);
+    @GetMapping(value = "/current")
+    public Principal getPrincipal(Principal principal) {
+        return principal;
     }
 }

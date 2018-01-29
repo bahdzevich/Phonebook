@@ -17,14 +17,15 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Profile service class.
+ * Profile impl class.
  *
  * @author Eugene Bogdevich
  */
 @Service
 public class ProfileService implements IProfileService {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProfileService.class);
+
     private final ProfileRepository profileRepository;
 
     @Autowired
@@ -41,7 +42,7 @@ public class ProfileService implements IProfileService {
         try {
             savedProfile = profileRepository.save(profile);
         } catch (Exception ex) {
-            logger.error(String.format("Exception wile saving profile – %s.", profile), ex);
+            LOGGER.error(String.format("Exception wile saving profile – %s.", profile), ex);
         }
         return Optional.ofNullable(savedProfile);
     }
@@ -53,7 +54,7 @@ public class ProfileService implements IProfileService {
         try {
             profile = profileRepository.findOne(id);
         } catch (Exception ex) {
-            logger.error(String.format("Exception wile searching profile – Profile ID = %s.", id), ex);
+            LOGGER.error(String.format("Exception wile searching profile – Profile ID = %s.", id), ex);
         }
         return Optional.ofNullable(profile);
     }
@@ -65,7 +66,7 @@ public class ProfileService implements IProfileService {
         try {
             profileList.addAll(profileRepository.findAll());
         } catch (Exception ex) {
-            logger.error("Exception while searching profiles: ", ex);
+            LOGGER.error("Exception while searching profiles: ", ex);
         }
         return profileList;
     }
@@ -77,7 +78,7 @@ public class ProfileService implements IProfileService {
         try {
             profilePage = profileRepository.findAll(pageable);
         } catch (Exception ex) {
-            logger.error(
+            LOGGER.error(
                     String.format(
                             "Exception while searching profiles – page = %s, size = %s",
                             pageable.getPageNumber(),
@@ -101,7 +102,7 @@ public class ProfileService implements IProfileService {
             profileRepository.delete(id);
             deleted = true;
         } catch (Exception ex) {
-            logger.error(String.format("Exception while deleting profile – id = %s.", id), ex);
+            LOGGER.error(String.format("Exception while deleting profile – id = %s.", id), ex);
         }
         return deleted;
     }

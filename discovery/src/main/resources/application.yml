@@ -1,15 +1,15 @@
-spring:
-  application:
-    name: discovery
 server:
   port: 8761
+
 eureka:
   instance:
     prefer-ip-address: true
+    hostname: localhost
   client:
-    register-with-eureka: false
+    register-with-eureka: false # self server registration
     fetch-registry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
   server:
     wait-time-in-ms-when-sync-empty: 0
-    enable-self-preservation: false
 

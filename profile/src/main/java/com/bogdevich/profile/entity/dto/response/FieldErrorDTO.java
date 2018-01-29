@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FieldErrorDTO {
-    String field;
-    String code;
-    Object rejectedValue;
+    private String field;
+    private String code;
+    private Object rejectedValue;
 
     public FieldErrorDTO() {
     }
