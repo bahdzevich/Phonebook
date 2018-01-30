@@ -43,11 +43,11 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
         resources.resourceId(RESOURCE_ID).tokenServices(tokenServices);
     }
 
-/*    *//**
+    /**
      *
      * @param http
      * @throws Exception
-     *//*
+     */
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
@@ -57,5 +57,5 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/phonebook/api/profiles/csv/**").hasRole("ADMIN")
                 .antMatchers("/phonebook/api/profiles/**").authenticated()
                 .antMatchers("/phonebook/api/news/**").authenticated();
-    }*/
+    }
 }
