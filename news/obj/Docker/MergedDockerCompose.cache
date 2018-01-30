@@ -1,0 +1,15 @@
+networks:
+  default:
+    external:
+      name: nat
+services:
+  news:
+    build:
+      context: C:\dev\Phonebook\news\news
+      dockerfile: Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    image: news
+    ports:
+    - 80/tcp
+version: '3.0'
