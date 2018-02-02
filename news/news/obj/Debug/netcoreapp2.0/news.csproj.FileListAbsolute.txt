@@ -1,0 +1,13 @@
+C:\dev\Phonebook\news\news\bin\Debug\netcoreapp2.0\news.deps.json
+C:\dev\Phonebook\news\news\bin\Debug\netcoreapp2.0\news.runtimeconfig.json
+C:\dev\Phonebook\news\news\bin\Debug\netcoreapp2.0\news.runtimeconfig.dev.json
+C:\dev\Phonebook\news\news\bin\Debug\netcoreapp2.0\news.dll
+C:\dev\Phonebook\news\news\bin\Debug\netcoreapp2.0\news.pdb
+C:\dev\Phonebook\news\news\obj\Debug\netcoreapp2.0\news.csprojResolveAssemblyReference.cache
+C:\dev\Phonebook\news\news\obj\Debug\netcoreapp2.0\news.csproj.CoreCompileInputs.cache
+C:\dev\Phonebook\news\news\obj\Debug\netcoreapp2.0\news.AssemblyInfoInputs.cache
+C:\dev\Phonebook\news\news\obj\Debug\netcoreapp2.0\news.AssemblyInfo.cs
+C:\dev\Phonebook\news\news\obj\Debug\netcoreapp2.0\news.dll
+C:\dev\Phonebook\news\news\obj\Debug\netcoreapp2.0\news.pdb
+C:\dev\Phonebook\news\news\obj\Debug\netcoreapp2.0\news.Properties.Resources.resources
+C:\dev\Phonebook\news\news\obj\Debug\netcoreapp2.0\news.csproj.GenerateResource.Cache

@@ -3,6 +3,7 @@ package com.bogdevich.auth.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
@@ -18,7 +19,7 @@ import org.springframework.security.oauth2.provider.token.ResourceServerTokenSer
  * (Due to some limitations of Spring Framework).
  * You need to tell Spring Boot to set OAuth2 request filter order to 3
  * to align with the hardcoded value. You do that
- * by adding security.oauth2.resource.filter-order = 3 in the application.properties file.
+ * by adding security.oauth2.resource.filter-order = 3 in the security.properties file.
  *
  * @author Eugene Bogdevich
  */
@@ -29,7 +30,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
     private ResourceServerTokenServices tokenServices;
 
     @Value("${security.jwt.resource-ids}")
-    private String resourceIds;
+    private String RESOURCE_ID;
 
     @Autowired
     public ResourceServerConfiguration(ResourceServerTokenServices tokenServices) {
@@ -39,16 +40,26 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
-        resources.resourceId(resourceIds).tokenServices(tokenServices);
+        resources.resourceId(RESOURCE_ID).tokenServices(tokenServices);
     }
 
+    /**
+     *
+     * @param http
+     * @throws Exception
+     */
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http
                 .requestMatchers()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/actuator/**", "/api-docs/**").permitAll()
-                .antMatchers("/phonebook/v1/**").authenticated();
+                .antMatchers("/phonebook/api/users/current/**").permitAll();
+
+        /*
+                .antMatchers("/phonebook/api/profiles/csv/**").hasRole("ADMIN")
+                .antMatchers("/phonebook/api/profiles/**").authenticated()
+                .antMatchers("/phonebook/api/news/**").authenticated();
+        */
     }
 }

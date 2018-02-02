@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  news:
+    image: news
+    build:
+      context: ./news
+      dockerfile: Dockerfile
