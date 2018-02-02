@@ -1,7 +1,9 @@
 package com.bogdevich.profile.controller;
 
+import com.bogdevich.profile.context.SecurityContextHolder;
 import com.bogdevich.profile.controller.exception.DataNotFoundException;
 import com.bogdevich.profile.controller.exception.InternalServiceException;
+import com.bogdevich.profile.controller.exception.PermissionException;
 import com.bogdevich.profile.controller.util.mapper.ProfileRequestMapper;
 import com.bogdevich.profile.controller.util.mapper.ProfileResponseMapper;
 import com.bogdevich.profile.controller.util.validator.ProfileRequestDtoValidator;
@@ -11,18 +13,22 @@ import com.bogdevich.profile.entity.dto.response.ProfileResponseDTO;
 import com.bogdevich.profile.entity.dto.response.ProfilesListDTO;
 import com.bogdevich.profile.service.IProfileService;
 import com.bogdevich.profile.service.IRoleService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Rest controller for profile endpoint.
@@ -31,18 +37,13 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping(
+        value = "/profiles",
         produces = MediaType.APPLICATION_JSON_UTF8_VALUE
 )
-public class ProfileRestController {
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    private final Integer DEFAULT_PAGE = 0;
-    private final Integer DEFAULT_SIZE = 20;
+@PropertySource("classpath:security.properties")
+public class ProfileRestController extends AbstractRestController{
 
     private final IProfileService profileService;
-    private final IRoleService roleService;
-    private final ProfileResponseMapper profileResponseMapper;
     private final ProfileRequestMapper profileRequestMapper;
     private final ProfileRequestDtoValidator profileRequestDtoValidator;
 
@@ -53,25 +54,23 @@ public class ProfileRestController {
 
     @Autowired
     public ProfileRestController(
-            IProfileService profileService,
-            IRoleService roleService,
             ProfileResponseMapper profileResponseMapper,
+            IProfileService profileService,
             ProfileRequestMapper profileRequestMapper,
-            ProfileRequestDtoValidator profileRequestDtoValidator
-    ) {
+            ProfileRequestDtoValidator profileRequestDtoValidator) {
+        super(profileResponseMapper);
         this.profileService = profileService;
-        this.roleService = roleService;
-        this.profileResponseMapper = profileResponseMapper;
         this.profileRequestMapper = profileRequestMapper;
         this.profileRequestDtoValidator = profileRequestDtoValidator;
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ProfileResponseDTO> getProfileById(@PathVariable Long id) {
-        Profile profile = profileService
+        ProfileResponseDTO profileResponseDTO = profileService
                 .findOne(id)
-                .orElseThrow(() -> new DataNotFoundException(String.format("There is no profile with such id: %s.", id)));
-        ProfileResponseDTO profileResponseDTO = profileResponseMapper.profileToDto(profile);
+                .map(profileResponseMapper::profileToDto)
+                .orElseThrow(() ->
+                        new DataNotFoundException(String.format("There is no profile with such id: %s.", id)));
         return new ResponseEntity<>(profileResponseDTO, HttpStatus.OK);
     }
 
@@ -79,30 +78,31 @@ public class ProfileRestController {
     public ResponseEntity<ProfilesListDTO> getProfiles(
             @RequestParam(value = "page", required = false)  Integer page,
             @RequestParam(value = "size", required = false) Integer size) {
-        final Integer pageNumber = (page == null || page < 0) ? DEFAULT_PAGE : page;
-        final Integer pageSize = (size == null || size < 1) ? DEFAULT_SIZE : size;
-        PageRequest pageRequest = new PageRequest(pageNumber, pageSize);
-        Page<ProfileResponseDTO> profilesPage = profileService
+
+        PageRequest pageRequest = new PageRequest(
+                this.checkParameter(page, DEFAULT_PAGE, page1 -> (page1 == null || page1 < 0)),
+                this.checkParameter(size, DEFAULT_SIZE, size1 -> (size1 == null || size1 < 1)));
+
+        ProfilesListDTO profilesListDTO = profileService
                 .findAll(pageRequest)
-                .orElseThrow(() -> new DataNotFoundException(
-                        String.format("Can't find profiles for the searching params; page = %s, size = %s", pageNumber, pageSize)
-                )).map(profileResponseMapper::profileToDto);
-        ProfilesListDTO profilesListDTO = new ProfilesListDTO();
-        profilesListDTO.setItems(profilesPage.getTotalElements());
-        profilesListDTO.setPages(profilesPage.getTotalPages());
-        profilesListDTO.setProfiles(profilesPage.getContent());
+                .map(profiles -> profiles.map(profileResponseMapper::profileToDto))
+                .map(this::createProfileListDto)
+                .orElseThrow(() ->
+                        new DataNotFoundException(
+                                String.format("Can't find profiles: page = \'%s\', size = \'%s\'",
+                                        pageRequest.getPageNumber(), pageRequest.getPageSize())));
+
         return new ResponseEntity<>(profilesListDTO, HttpStatus.OK);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<ProfileResponseDTO> createProfile(@RequestBody ProfileRequestDTO profileRequestDTO) {
-        //ToDo: Delete logger.
-        logger.debug(String.format("Trying to create profile; Profile: \'%s\'.", profileRequestDTO));
+    public ResponseEntity<ProfileResponseDTO> createProfile(@Valid @RequestBody ProfileRequestDTO profileRequestDTO) {
+        LOGGER.info(String.format("POST :: profile: \'%s\'.", profileRequestDTO));
         Profile profile = profileRequestMapper.dtoToProfile(profileRequestDTO);
-        Profile savedProfile = profileService
+        ProfileResponseDTO savedProfileResponseDTO = profileService
                 .save(profile)
+                .map(profileResponseMapper::profileToDto)
                 .orElseThrow(() -> new InternalServiceException(String.format("There is a problem with profile saving; Profile: \'%s\'.", profileRequestDTO)));
-        ProfileResponseDTO savedProfileResponseDTO = profileResponseMapper.profileToDto(savedProfile);
         return new ResponseEntity<>(savedProfileResponseDTO, HttpStatus.CREATED);
     }
 
@@ -110,30 +110,35 @@ public class ProfileRestController {
     public ResponseEntity<ProfileResponseDTO> updateProfile(
             @PathVariable Long id,
             @Valid @RequestBody ProfileRequestDTO profileRequestDTO) {
-        //ToDo: Delete logger.
-        logger.debug(String.format("Trying to update profile with id: \'%s\'; Profile: \'%s\'.", id, profileRequestDTO));
+        LOGGER.info(String.format("UPDATE :: profile-id:\'%s\'; profile:\'%s\'.", id, profileRequestDTO));
+        this.checkPermission(id);
         Profile profile = profileRequestMapper.dtoToProfile(profileRequestDTO);
         profile.setId(id);
-        Profile updatedProfile = profileService
-                .save(profile)
-                .orElseThrow(() -> new InternalServiceException(String.format("Can not update profile: %s.", profileRequestDTO)));
-        ProfileResponseDTO profileResponseDTO = profileResponseMapper.profileToDto(updatedProfile);
+        ProfileResponseDTO profileResponseDTO = profileService
+                .update(profile, id)
+                .map(profileResponseMapper::profileToDto)
+                .orElseThrow(() -> new InternalServiceException(String.format("Exception while updating profile: %s.", profileRequestDTO)));
         return new ResponseEntity<>(profileResponseDTO, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/{id}", consumes = MediaType.ALL_VALUE)
+    @DeleteMapping(value = "/{id}")
     public ResponseEntity deleteProfile(@PathVariable Long id) {
-        //ToDo: Delete logger.
-        logger.debug(String.format("Trying to delete profile with id: \'%s\'.", id));
+        LOGGER.info(String.format("DELETE :: profile id:\'%s\'.", id));
+        this.checkPermission(id);
         boolean profileDeleted = profileService.delete(id);
         return profileDeleted ?
                 new ResponseEntity(HttpStatus.OK) :
                 new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
-/*    @GetMapping("/{query}")
-    public ResponseEntity<List<ProfileResponseDTO>> findProfileByQuery(@PathVariable String query) {
-        //ToDo: opportunity to find profiles by custom select query.
-        throw new UnsupportedOperationException();
-    }*/
+    @Override
+    protected <T> void checkPermission(T t) {
+        boolean permitted = SecurityContextHolder
+                .getThreadLocalAuthorityList()
+                .stream().anyMatch(s -> s.equals("ADMIN"))
+                || t.equals(SecurityContextHolder.getThreadLocalPrincipalId());
+        if (!permitted) {
+            throw new PermissionException("Access denied.");
+        }
+    }
 }

@@ -1,7 +1,5 @@
 package com.bogdevich.profile.entity.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.Set;
 
 /**
@@ -12,8 +10,6 @@ import java.util.Set;
 public class ProfileResponseDTO {
     private Long id;
     private String email;
-    @JsonIgnore
-    private String password;
     private String name;
     private String lastname;
     private String skype;
@@ -25,10 +21,9 @@ public class ProfileResponseDTO {
     public ProfileResponseDTO() {
     }
 
-    public ProfileResponseDTO(Long id, String email, String password, String name, String lastname, String skype, String phone, int room, Set<RoleResponseDTO> roles, Set<ProjectResponseDTO> projects) {
+    public ProfileResponseDTO(Long id, String email, String name, String lastname, String skype, String phone, int room, Set<RoleResponseDTO> roles, Set<ProjectResponseDTO> projects) {
         this.id = id;
         this.email = email;
-        this.password = password;
         this.name = name;
         this.lastname = lastname;
         this.skype = skype;
@@ -44,10 +39,6 @@ public class ProfileResponseDTO {
 
     public String getEmail() {
         return email;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public String getName() {
@@ -84,10 +75,6 @@ public class ProfileResponseDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public void setName(String name) {
@@ -149,7 +136,6 @@ public class ProfileResponseDTO {
         return "Profile: {" +
                 "id=" + id +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", lastname='" + lastname + '\'' +
                 ", skype='" + skype + '\'' +

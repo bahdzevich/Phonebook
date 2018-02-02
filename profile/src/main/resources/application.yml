@@ -1,6 +1,6 @@
 server:
   port: 9096
-  context-path: /phonebook/api/profiles
+  context-path: /phonebook/profile-service/api
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver

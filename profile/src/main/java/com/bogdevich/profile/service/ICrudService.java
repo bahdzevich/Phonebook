@@ -25,7 +25,7 @@ public interface ICrudService<T> {
 
     Optional<Page<T>> findAll(Pageable pageable);
 
-    Optional<T> update(T t);
+    Optional<T> update(T t, Long id);
 
     boolean delete(Long id);
 }

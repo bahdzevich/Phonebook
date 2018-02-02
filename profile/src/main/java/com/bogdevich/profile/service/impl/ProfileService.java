@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -90,9 +91,18 @@ public class ProfileService implements IProfileService {
 
     @Override
     @Transactional
-    public Optional<Profile> update(Profile profile) {
-        //ToDo: to implement logic of saving.
-        throw new UnsupportedOperationException();
+    public Optional<Profile> update(Profile profile, Long id) {
+        Profile savedProfile = null;
+        try {
+            Profile current = profileRepository.findOne(id);
+            profile.setProjects(current.getProjects());
+            profile.setRoles(current.getRoles());
+            profile.setPassword(current.getPassword());
+            savedProfile = profileRepository.save(profile);
+        } catch (Exception ex) {
+            LOGGER.error(String.format("Exception wile saving profile – %s.", profile), ex);
+        }
+        return Optional.ofNullable(savedProfile);
     }
 
     @Override

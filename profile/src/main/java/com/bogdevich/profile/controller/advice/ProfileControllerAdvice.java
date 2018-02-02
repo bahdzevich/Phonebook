@@ -5,6 +5,7 @@ import com.bogdevich.profile.controller.ProjectRestController;
 import com.bogdevich.profile.controller.RoleController;
 import com.bogdevich.profile.controller.exception.DataNotFoundException;
 import com.bogdevich.profile.controller.exception.InternalServiceException;
+import com.bogdevich.profile.controller.exception.PermissionException;
 import com.bogdevich.profile.entity.dto.response.ErrorDTO;
 import com.bogdevich.profile.entity.dto.response.FieldErrorDTO;
 import com.bogdevich.profile.entity.dto.response.MessageDTO;
@@ -39,11 +40,11 @@ import java.util.stream.Collectors;
         })
 public class ProfileControllerAdvice extends ResponseEntityExceptionHandler{
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final static Logger LOGGER = LoggerFactory.getLogger(ProfileControllerAdvice.class);
 
     @ExceptionHandler(DataNotFoundException.class)
     public ResponseEntity<MessageDTO> handleNotFoundException(Throwable ex){
-        logger.warn(ex.getMessage(), ex);
+        LOGGER.warn(ex.getMessage(), ex);
         MessageDTO messageDTO = new MessageDTO();
         messageDTO.setTime(LocalDateTime.now().toString());
         messageDTO.setStatus(HttpStatus.NOT_FOUND.value());
@@ -51,9 +52,20 @@ public class ProfileControllerAdvice extends ResponseEntityExceptionHandler{
         return new ResponseEntity<>(messageDTO, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(PermissionException.class)
+    public ResponseEntity<MessageDTO> handlePermissionException(Throwable ex, HttpServletRequest request){
+        LOGGER.warn(ex.getMessage(), ex);
+        MessageDTO messageDTO = new MessageDTO();
+        messageDTO.setTime(LocalDateTime.now().toString());
+        messageDTO.setStatus(HttpStatus.FORBIDDEN.value());
+        messageDTO.setMessage(ex.getMessage());
+        messageDTO.setPath(request.getRequestURI());
+        return new ResponseEntity<>(messageDTO, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(InternalServiceException.class)
     public ResponseEntity<MessageDTO> handleInternalServiceException(Throwable ex, HttpServletRequest httpServletRequest) {
-        logger.warn(ex.getMessage(), ex);
+        LOGGER.warn(ex.getMessage(), ex);
         MessageDTO messageDTO = new MessageDTO();
         messageDTO.setTime(LocalDateTime.now().toString());
         messageDTO.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());

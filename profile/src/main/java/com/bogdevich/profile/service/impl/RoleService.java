@@ -32,7 +32,7 @@ public class RoleService implements IRoleService {
     }
 
     @Override
-    public Optional<Role> update(Role role) {
+    public Optional<Role> update(Role role, Long id) {
         return null;
     }
 

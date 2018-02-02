@@ -15,9 +15,6 @@ import org.springframework.validation.Validator;
 @Component
 public class ProfileRequestDtoValidator implements Validator {
 
-    @Value("profile.exists")
-    private String PROFILE_EXISTS;
-
     private ProfileRepository profileRepository;
     private ProfileRequestMapper profileRequestMapper;
 
@@ -40,7 +37,7 @@ public class ProfileRequestDtoValidator implements Validator {
         ProfileRequestDTO profileRequestDTO = (ProfileRequestDTO) target;
         Profile profile = profileRequestMapper.dtoToProfile(profileRequestDTO);
         if (profileRepository.exists(Example.of(profile))) {
-            errors.reject(PROFILE_EXISTS);
+            errors.reject("Profile already exists.");
         }
     }
 }
