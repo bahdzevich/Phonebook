@@ -54,8 +54,12 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .requestMatchers()
                 .and()
                 .authorizeRequests()
+                .antMatchers("/phonebook/api/users/current/**").permitAll();
+
+        /*
                 .antMatchers("/phonebook/api/profiles/csv/**").hasRole("ADMIN")
                 .antMatchers("/phonebook/api/profiles/**").authenticated()
                 .antMatchers("/phonebook/api/news/**").authenticated();
+        */
     }
 }
