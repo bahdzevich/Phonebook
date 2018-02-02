@@ -1,0 +1,49 @@
+server:
+  port: 9090
+
+info:
+  component: Zuul Server
+
+eureka:
+  instance:
+    preferIpAddress: true
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
+
+zuul:
+  ignored-services: '*'
+  host:
+    connect-timeout-millis: 30000
+    socket-timeout-millis: 30000
+  routes:
+    auth-service:
+      path: /phonebook/api/uaa/**
+      serviceId: auth-service
+      stripPrefix: false
+    profile-service:
+      path: /phonebook/profile-service/api/**
+      serviceId: profile-service
+      stripPrefix: false # needed because of setting context path
+    news-service:
+      path: /phonebook/news-service/api/**
+      serviceId: news-service
+      stripPrefix: false
+
+
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://localhost:10000/phonebook/api/uaa/users/current
+  user:
+    password: none
+
+

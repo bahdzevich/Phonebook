@@ -1,6 +1,7 @@
 package com.bogdevich.auth.entity.domain;
 
 import com.fasterxml.jackson.annotation.*;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
