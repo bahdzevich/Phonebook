@@ -12,7 +12,7 @@ using news.Dto;
 namespace news.Controllers
 {
     [Produces("application/json")]
-    [Route("phonebook/v1/api/news")]
+    [Route("phonebook/news-service/api/news")]
     public class NewsController : Controller
     {
         private readonly NewsContext _context;
@@ -22,14 +22,14 @@ namespace news.Controllers
             _context = context;
         }
 
-        // GET: phonebook/v1/api/news
+        // GET: phonebook/api/news
         [HttpGet]
         public IEnumerable<News> GetNews()
         {
             return _context.News;
         }
 
-        // GET: phonebook/v1/api/news/5
+        // GET: phonebook/api/news/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetNews([FromRoute] long id)
         {
@@ -48,6 +48,7 @@ namespace news.Controllers
             return Ok(news);
         }
 
+        // GET phonebook/api/news/categories/5
         [HttpGet("categories/{id}")]
         public  IActionResult GetNewsByCategory([FromRoute] long id)
         {
@@ -92,7 +93,7 @@ namespace news.Controllers
             }
         }
 
-        // PUT: phonebook/v1/api/news/5
+        // PUT: phonebook/api/news/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutNews([FromRoute] long id, [FromBody] News news)
         {
@@ -127,7 +128,7 @@ namespace news.Controllers
             return NoContent();
         }
 
-        // POST: phonebook/v1/api/news
+        // POST: phonebook/api/news
         [HttpPost]
         public async Task<IActionResult> PostNews([FromBody] NewsRequestDto newsDto)
         {
@@ -166,7 +167,7 @@ namespace news.Controllers
             return CreatedAtAction("GetNews", new { id = news.Id }, news);
         }
 
-        // DELETE: phonebook/v1/api/news/5
+        // DELETE: phonebook/api/news/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNews([FromRoute] long id)
         {

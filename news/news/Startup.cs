@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using news.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Pivotal.Discovery.Client;
+using Steeltoe.Discovery.Client;
 
 namespace news
 {

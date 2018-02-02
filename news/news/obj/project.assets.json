@@ -2916,23 +2916,6 @@
           "lib/netstandard1.3/NuGet.Frameworks.dll": {}
         }
       },
-      "Pivotal.Discovery.Client/1.1.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.0",
-          "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
-          "NETStandard.Library": "1.6.1",
-          "Steeltoe.CloudFoundry.Connector": "1.1.0",
-          "Steeltoe.Discovery.Client": "1.1.0",
-          "System.Net.Http": "4.3.1"
-        },
-        "compile": {
-          "lib/netstandard1.5/Pivotal.Discovery.Client.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.5/Pivotal.Discovery.Client.dll": {}
-        }
-      },
       "Remotion.Linq/2.1.1": {
         "type": "package",
         "dependencies": {
@@ -3304,20 +3287,6 @@
           "lib/netstandard1.5/StackExchange.Redis.StrongName.dll": {}
         }
       },
-      "Steeltoe.CloudFoundry.Connector/1.1.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "1.1.0",
-          "NETStandard.Library": "1.6.1",
-          "Steeltoe.Extensions.Configuration.CloudFoundry": "1.1.1"
-        },
-        "compile": {
-          "lib/netstandard1.5/Steeltoe.CloudFoundry.Connector.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.5/Steeltoe.CloudFoundry.Connector.dll": {}
-        }
-      },
       "Steeltoe.Discovery.Client/1.1.0": {
         "type": "package",
         "dependencies": {
@@ -3348,25 +3317,6 @@
         },
         "runtime": {
           "lib/netstandard1.3/Steeltoe.Discovery.Eureka.Client.dll": {}
-        }
-      },
-      "Steeltoe.Extensions.Configuration.CloudFoundry/1.1.1": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.AspNetCore.Hosting.Abstractions": "1.1.0",
-          "Microsoft.Extensions.Configuration": "1.1.0",
-          "Microsoft.Extensions.Configuration.EnvironmentVariables": "1.1.0",
-          "Microsoft.Extensions.Configuration.Json": "1.1.0",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "1.1.0",
-          "Microsoft.Extensions.Options": "1.1.0",
-          "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
-          "NETStandard.Library": "1.6.1"
-        },
-        "compile": {
-          "lib/netstandard1.3/Steeltoe.Extensions.Configuration.CloudFoundry.dll": {}
-        },
-        "runtime": {
-          "lib/netstandard1.3/Steeltoe.Extensions.Configuration.CloudFoundry.dll": {}
         }
       },
       "System.AppContext/4.3.0": {
@@ -8265,17 +8215,6 @@
         "nuget.frameworks.nuspec"
       ]
     },
-    "Pivotal.Discovery.Client/1.1.0": {
-      "sha512": "qxNpoUmyoWbLaoM7D5LbBPXSJ2m386g+9L3fUHB2FyF8oBhAkHNSDCOO5iXn5wU4Az/SSOuVhGRa5OvplXQ43A==",
-      "type": "package",
-      "path": "pivotal.discovery.client/1.1.0",
-      "files": [
-        "lib/net452/Pivotal.Discovery.Client.dll",
-        "lib/netstandard1.5/Pivotal.Discovery.Client.dll",
-        "pivotal.discovery.client.1.1.0.nupkg.sha512",
-        "pivotal.discovery.client.nuspec"
-      ]
-    },
     "Remotion.Linq/2.1.1": {
       "sha512": "IJn0BqkvwEDpP+2qjvci7n4/a9f7DhKESLWb2/uG4xQh3rTkGTBUz69bI4IivCoKkTFAqjXxYDZw2K/npohjsw==",
       "type": "package",
@@ -8692,17 +8631,6 @@
         "stackexchange.redis.strongname.nuspec"
       ]
     },
-    "Steeltoe.CloudFoundry.Connector/1.1.0": {
-      "sha512": "0IsLYVdUhUoTr+Nr0u0AzW6nWBQ4IPg2EGY6MrElgb6Tpyj31RPcmlX//E4h+51B7ZxDun/iWk4wUeoQE7KB1Q==",
-      "type": "package",
-      "path": "steeltoe.cloudfoundry.connector/1.1.0",
-      "files": [
-        "lib/net452/Steeltoe.CloudFoundry.Connector.dll",
-        "lib/netstandard1.5/Steeltoe.CloudFoundry.Connector.dll",
-        "steeltoe.cloudfoundry.connector.1.1.0.nupkg.sha512",
-        "steeltoe.cloudfoundry.connector.nuspec"
-      ]
-    },
     "Steeltoe.Discovery.Client/1.1.0": {
       "sha512": "7iExWEEF1D/yNaRcVvTwzeP6PbbHHamg0LRdPMgqhNnIzQ5VMVExCwVxQP4aiVnw5wTCX1+gajST9Ya+TObJ2g==",
       "type": "package",
@@ -8723,17 +8651,6 @@
         "lib/netstandard1.3/Steeltoe.Discovery.Eureka.Client.dll",
         "steeltoe.discovery.eureka.client.1.1.0.nupkg.sha512",
         "steeltoe.discovery.eureka.client.nuspec"
-      ]
-    },
-    "Steeltoe.Extensions.Configuration.CloudFoundry/1.1.1": {
-      "sha512": "kpyIFZEfLB47tWA5fURLOPt4HwMLKsffryodKc50b7wnnInrok87eKzek6Xbo+cnJrodjoPZlUnO64aK0pSKzw==",
-      "type": "package",
-      "path": "steeltoe.extensions.configuration.cloudfoundry/1.1.1",
-      "files": [
-        "lib/net452/Steeltoe.Extensions.Configuration.CloudFoundry.dll",
-        "lib/netstandard1.3/Steeltoe.Extensions.Configuration.CloudFoundry.dll",
-        "steeltoe.extensions.configuration.cloudfoundry.1.1.1.nupkg.sha512",
-        "steeltoe.extensions.configuration.cloudfoundry.nuspec"
       ]
     },
     "System.AppContext/4.3.0": {
@@ -13505,7 +13422,7 @@
       "Microsoft.NETCore.App >= 2.0.0",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 2.0.2",
       "MySql.Data.EntityFrameworkCore >= 6.10.5",
-      "Pivotal.Discovery.Client >= 1.1.0",
+      "Steeltoe.Discovery.Client >= 1.1.0",
       "System.ComponentModel.Annotations >= 4.4.1"
     ]
   },
@@ -13573,10 +13490,6 @@
             "target": "Package",
             "version": "2.0.1"
           },
-          "Pivotal.Discovery.Client": {
-            "target": "Package",
-            "version": "1.1.0"
-          },
           "Microsoft.NETCore.App": {
             "target": "Package",
             "version": "2.0.0",
@@ -13585,6 +13498,10 @@
           "Microsoft.AspNetCore.All": {
             "target": "Package",
             "version": "2.0.0"
+          },
+          "Steeltoe.Discovery.Client": {
+            "target": "Package",
+            "version": "1.1.0"
           }
         },
         "imports": [

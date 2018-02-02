@@ -23,7 +23,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" />
     <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="6.10.5" />
-    <PackageReference Include="Pivotal.Discovery.Client" Version="1.1.0" />
+    <PackageReference Include="Steeltoe.Discovery.Client" Version="1.1.0" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.4.1" />
   </ItemGroup>
 
