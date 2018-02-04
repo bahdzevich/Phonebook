@@ -22,8 +22,10 @@ public interface ProfileRepository extends JpaRepository<Profile, Long>{
      */
     @Query(
             value = "" +
-                    "SELECT `user`.id, `user`.name, `user`.lastname, `user`.email, `user`.skype, `user`.phone, `user`.room " +
+                    "SELECT `user`.id, `user`.name, `user`.lastname, `user`.email, `user`.skype, `user`.phone, `user`.room, `password`.hash " +
                     "FROM phonebook.`user` " +
+                    "JOIN phonebook.`password` " +
+                    "ON `user`.id = `password`.user_id " +
                     "JOIN phonebook.`user_projects` " +
                     "ON `user`.`id` = `user_projects`.user_id " +
                     "JOIN phonebook.`project` " +

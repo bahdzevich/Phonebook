@@ -53,8 +53,8 @@ public class ProjectRestController extends AbstractRestController{
             @RequestParam(value = "size", required = false) Integer size) {
 
         PageRequest pageRequest = new PageRequest(
-                this.checkParameter(page, DEFAULT_PAGE, page1 -> (page1 == null || page1 < 0)),
-                this.checkParameter(size, DEFAULT_SIZE, size1 -> (size1 == null || size1 < 1)));
+                this.checkParameter(page, DEFAULT_PAGE, page1 -> !(page1 == null || page1 < 0)),
+                this.checkParameter(size, DEFAULT_SIZE, size1 -> !(size1 == null || size1 < 1)));
 
         List<ProjectResponseDTO> projectResponseDTOList = projectService
                 .findAll(pageRequest)
@@ -74,8 +74,8 @@ public class ProjectRestController extends AbstractRestController{
             @RequestParam(value = "size", required = false) Integer size) {
 
         PageRequest pageRequest = new PageRequest(
-                this.checkParameter(page, DEFAULT_PAGE, page1 -> (page1 == null || page1 < 0)),
-                this.checkParameter(size, DEFAULT_SIZE, size1 -> (size1 == null || size1 < 1)));
+                this.checkParameter(page, DEFAULT_PAGE, page1 -> !(page1 == null || page1 < 0)),
+                this.checkParameter(size, DEFAULT_SIZE, size1 -> !(size1 == null || size1 < 1)));
 
         ProfilesListDTO profilesListDTO = projectService
                 .findProfilesByProjectId(id, pageRequest)

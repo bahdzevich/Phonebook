@@ -80,8 +80,8 @@ public class ProfileRestController extends AbstractRestController{
             @RequestParam(value = "size", required = false) Integer size) {
 
         PageRequest pageRequest = new PageRequest(
-                this.checkParameter(page, DEFAULT_PAGE, page1 -> (page1 == null || page1 < 0)),
-                this.checkParameter(size, DEFAULT_SIZE, size1 -> (size1 == null || size1 < 1)));
+                this.checkParameter(page, DEFAULT_PAGE, page1 -> !(page1 == null || page1 < 0)),
+                this.checkParameter(size, DEFAULT_SIZE, size1 -> !(size1 == null || size1 < 1)));
 
         ProfilesListDTO profilesListDTO = profileService
                 .findAll(pageRequest)
@@ -111,7 +111,7 @@ public class ProfileRestController extends AbstractRestController{
             @PathVariable Long id,
             @Valid @RequestBody ProfileRequestDTO profileRequestDTO) {
         LOGGER.info(String.format("UPDATE :: profile-id:\'%s\'; profile:\'%s\'.", id, profileRequestDTO));
-        this.checkPermission(id);
+        checkPermission(id);
         Profile profile = profileRequestMapper.dtoToProfile(profileRequestDTO);
         profile.setId(id);
         ProfileResponseDTO profileResponseDTO = profileService
