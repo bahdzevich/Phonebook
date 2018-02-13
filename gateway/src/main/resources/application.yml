@@ -53,7 +53,7 @@ server:
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://${DISCOVERY_HOST}:${DISCOVERY_PORT}/eureka
+      defaultZone: http://discovery:${DISCOVERY_PORT}/eureka
 security:
   oauth2:
     resource:

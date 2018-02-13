@@ -36,13 +36,12 @@ services:
     image: phonebook/gateway
     environment:
       - GATEWAY_PORT=9090
-      - DISCOVERY_HOST=discovery
       - DISCOVERY_PORT=8761
       - AUTH_PORT=10000
     ports:
       - 9090:9090
     depends_on:
-      - discovery
+      - auth
   profile:
     image: phonebook/profile
     environment:
@@ -57,6 +56,6 @@ services:
     ports:
       - 9096:9096
     depends_on:
-      - discovery
+      - gateway
 volumes:
   phonebook-volume:
