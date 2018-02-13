@@ -25,25 +25,36 @@ zuul:
     connect-timeout-millis: 30000
     socket-timeout-millis: 30000
   routes:
-    auth-service:
-      path: /phonebook/api/uaa/**
-      serviceId: auth-service
+    auth:
+      path: /phonebook/uaa/api/**
+      serviceId: auth
       stripPrefix: false
-    profile-service:
+    profile:
       path: /phonebook/profile-service/api/**
-      serviceId: profile-service
+      serviceId: profile
       stripPrefix: false # needed because of setting context path
-    news-service:
+    news:
       path: /phonebook/news-service/api/**
-      serviceId: news-service
+      serviceId: news
       stripPrefix: false
-
 
 security:
   oauth2:
     resource:
-      user-info-uri: http://localhost:10000/phonebook/api/uaa/users/current
+      user-info-uri: http://localhost:10000/phonebook/uaa/api/users/current
   user:
     password: none
 
-
+---
+spring:
+  profiles: container
+server:
+  port: ${GATEWAY_PORT}
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${DISCOVERY_HOST}:${DISCOVERY_PORT}/eureka
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://auth:${AUTH_PORT}/phonebook/uaa/api/users/current

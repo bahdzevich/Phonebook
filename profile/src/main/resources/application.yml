@@ -1,12 +1,12 @@
 server:
-  port: 9096
+  port: 9094
   context-path: /phonebook/profile-service/api
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/phonebook
     username: root
-    password: root
+    password: qwerty
   jpa:
     hibernate:
       ddl-auto: none
@@ -22,3 +22,19 @@ eureka:
     instance-id: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${random.value}}}
   client:
     registry-fetch-interval-seconds: 5
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+---
+server:
+  port: ${PROFILE_PORT}
+spring:
+  profiles: container
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
+eureka:
+    client:
+      service-url:
+        defaultZone: http://${DISCOVERY_HOST}:${DISCOVERY_PORT}/eureka

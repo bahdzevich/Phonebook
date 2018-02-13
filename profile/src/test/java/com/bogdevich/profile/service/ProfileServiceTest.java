@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.validation.constraints.NotNull;
@@ -18,6 +19,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@SpringBootTest
 public class ProfileServiceTest {
 
     private ProfileService profileService;

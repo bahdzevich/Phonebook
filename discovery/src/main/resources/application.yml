@@ -12,3 +12,12 @@ eureka:
       defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
   server:
     wait-time-in-ms-when-sync-empty: 0
+
+---
+spring:
+  profiles: container
+server:
+  port: ${DISCOVERY_PORT}
+eureka:
+  instance:
+    hostname: ${DISCOVERY_HOST}

@@ -1,0 +1,62 @@
+version: '3'
+services:
+  phonebook-mysql:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=qwerty
+    ports:
+      - 3306:3306
+    volumes:
+      - phonebook-volume:/var/lib/mysql
+  discovery:
+    image: phonebook/discovery:latest
+    environment:
+      - DISCOVERY_HOST=discovery
+      - DISCOVERY_PORT=8761
+    ports:
+      - 8761:8761
+    depends_on:
+      - phonebook-mysql
+  auth:
+    image: phonebook/auth:latest
+    environment:
+      - DATABASE_HOST=phonebook_phonebook-mysql_1
+      - DATABASE_PORT=3306
+      - DATABASE_NAME=phonebook
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=qwerty
+      - DISCOVERY_HOST=discovery
+      - DISCOVERY_PORT=8761
+      - AUTH_PORT=10000
+    ports:
+      - 10000:10000
+    depends_on:
+      - discovery
+  gateway:
+    image: phonebook/gateway
+    environment:
+      - GATEWAY_PORT=9090
+      - DISCOVERY_HOST=discovery
+      - DISCOVERY_PORT=8761
+      - AUTH_PORT=10000
+    ports:
+      - 9090:9090
+    depends_on:
+      - discovery
+  profile:
+    image: phonebook/profile
+    environment:
+      - PROFILE_PORT=9096
+      - DATABASE_HOST=phonebook_phonebook-mysql_1
+      - DATABASE_PORT=3306
+      - DATABASE_NAME=phonebook
+      - DATABASE_USER=root
+      - DATABASE_PASSWORD=qwerty
+      - DISCOVERY_HOST=discovery
+      - DISCOVERY_PORT=8761
+    ports:
+      - 9096:9096
+    depends_on:
+      - discovery
+volumes:
+  phonebook-volume:
