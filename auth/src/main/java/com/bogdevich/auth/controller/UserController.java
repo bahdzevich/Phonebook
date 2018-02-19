@@ -1,5 +1,7 @@
 package com.bogdevich.auth.controller;
 
+import com.bogdevich.auth.entity.domain.User;
+import com.bogdevich.auth.entity.dto.UserRequestDto;
 import com.bogdevich.auth.security.IUserService;
 import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -8,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +29,7 @@ import java.util.Optional;
  * @version 1.0
  */
 @RestController
-@RequestMapping("/users")
+@RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PropertySource("classpath:security.properties")
 public class UserController {
 
@@ -64,5 +68,26 @@ public class UserController {
                             return new ResponseEntity(hashMap, HttpStatus.OK); })
                         .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND)))
                 .orElse(new ResponseEntity<Map<String, String>>(HttpStatus.UNAUTHORIZED));
+    }
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<String> createUser(
+            @RequestBody @Valid UserRequestDto userRequestDto) {
+        return userService
+                .save(dtoToUser(userRequestDto))
+                .map(user -> new ResponseEntity<>("Success", HttpStatus.CREATED))
+                .orElse(new ResponseEntity<>("Already exists", HttpStatus.BAD_REQUEST));
+    }
+
+    private User dtoToUser(UserRequestDto requestDto) {
+        User user = new User();
+        user.setEmail(requestDto.getEmail());
+        user.setPassword(requestDto.getPassword());
+        user.setName(requestDto.getName());
+        user.setLastname(requestDto.getLastname());
+        user.setPhone(requestDto.getPhone());
+        user.setSkype(requestDto.getSkype());
+        user.setRoom(requestDto.getRoom());
+        return user;
     }
 }

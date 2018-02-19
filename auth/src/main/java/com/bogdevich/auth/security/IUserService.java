@@ -15,10 +15,10 @@ import java.util.Optional;
 public interface IUserService {
 
     /**
-     * User registration.
+     * Create new {@link User}.
      *
      * @param user {@link User}
-     * @return {@link Optional} object that will contains an {@link User} object if it is found.
+     * @return {@link User} saved instance
      */
     Optional<User> save(User user);
 

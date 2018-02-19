@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Example;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -59,66 +60,57 @@ public class UserService implements UserDetailsService, IUserService {
      * @throws UsernameNotFoundException if email not found.
      */
     @Override
-    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        LOGGER.info(String.format("Try to find user details, email: \'%s\'.", email));
-        Optional<User> userOptional = this.findByEmail(email);
-        return userOptional
+        if (email == null) {
+            throw new IllegalArgumentException("Email is null");
+        }
+        return Optional
+                .ofNullable(userRepository.findUserByEmail(email))
                 .map(user -> {
-                    List<GrantedAuthority> grantedAuthorities = user
-                            .getRoles().stream()
+                    List<GrantedAuthority> authorities = user.getRoles()
+                            .stream()
                             .map(role -> new SimpleGrantedAuthority(role.getName()))
                             .collect(Collectors.toList());
-                    return new org.springframework.security.core.userdetails.User(
-                            user.getEmail(), user.getPassword(),
-                            grantedAuthorities);
-                }).orElseThrow(() ->
-                        new UsernameNotFoundException(
-                                String.format("Authentication failed: \'%s\' email not found.", email))
-                );
+                    return new org.springframework.security.core.userdetails.
+                            User(user.getEmail(), user.getPassword(), authorities); })
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("Email is not found: " + email));
     }
 
     @Override
     @Transactional
-    public Optional<User> save(User user) {
-        String hashedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(hashedPassword);
-        Set<Role> roles = new HashSet<>();
-        User userSaved = null;
-        try {
-            roleRepository
-                    .findRoleByName(DEFAULT_ROLE_NAME)
-                    .ifPresent(roles::add);
-            user.setRoles(roles);
-            userSaved = userRepository.save(user);
-        } catch (Exception ex) {
-            LOGGER.error(String.format("Exception while saving user: \'%s\'.", user));
+    public Optional<User> save(final User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("User is null");
         }
-        return Optional.ofNullable(userSaved);
+        User savedUser = null;
+        if (!userRepository.exists(Example.of(user))) {
+            Role role = roleRepository.findRoleByName(DEFAULT_ROLE_NAME);
+            Set<Role> roles = new HashSet<>();
+            roles.add(role);
+            savedUser = userRepository.save(user);
+            savedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            savedUser.setRoles(roles);
+        }
+        return Optional.ofNullable(savedUser);
     }
 
     @Override
     @Transactional
-    public Optional<User> findByEmail(String email) {
-        User user = null;
-        try {
-            user = userRepository.findUserByEmail(email);
-        } catch (Exception ex) {
-            LOGGER.error(String.format("Exception while trying to find user by email: \'%s\'.", email), ex);
+    public Optional<User> findByEmail(final String email) {
+        if (email == null) {
+            throw new IllegalArgumentException("Email is null");
         }
-        return Optional.ofNullable(user);
+        return Optional.ofNullable(userRepository.findUserByEmail(email));
     }
 
     @Override
     @Transactional
     public Optional<User> findUserByID(Long id) {
-        User user = null;
-        try {
-            user = userRepository.findOne(id);
-        } catch (Exception ex) {
-            LOGGER.error(String.format("Exception while trying to find user by id: \'%s\'.", id), ex);
+        if (id == null) {
+            throw new IllegalArgumentException("User id is null");
         }
-        return Optional.ofNullable(user);
+        return Optional.ofNullable(userRepository.findOne(id));
     }
 
 }

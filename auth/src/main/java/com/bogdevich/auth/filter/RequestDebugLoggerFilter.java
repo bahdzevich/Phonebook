@@ -2,6 +2,7 @@ package com.bogdevich.auth.filter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -15,9 +16,9 @@ import java.util.stream.Collectors;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class PrincipalHeaderFilter implements Filter {
+public class RequestDebugLoggerFilter implements Filter {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(PrincipalHeaderFilter.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(RequestDebugLoggerFilter.class);
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -30,21 +31,22 @@ public class PrincipalHeaderFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
-        LOGGER.info(String.format(
-                "REQUEST :: %s %s %s",
-                req.getMethod(),
-                req.getRequestURI(),
-                Collections
-                        .list(req.getHeaderNames())
-                        .stream()
-                        .collect(Collectors.toMap(s -> s, req::getHeader))));
-        LOGGER.info(String.format(
-                "RESPONSE :: %s %s",
-                resp.getStatus(),
-                resp.getHeaderNames()
-                        .stream()
-                        .collect(Collectors.toMap(s -> s, req::getHeader))));
-
+        if(LOGGER.isDebugEnabled()) {
+            LOGGER.info(String.format(
+                    "REQUEST :: %s %s %s",
+                    req.getMethod(),
+                    req.getRequestURI(),
+                    Collections
+                            .list(req.getHeaderNames())
+                            .stream()
+                            .collect(Collectors.toMap(s -> s, req::getHeader))));
+            LOGGER.info(String.format(
+                    "RESPONSE :: %s %s",
+                    resp.getStatus(),
+                    resp.getHeaderNames()
+                            .stream()
+                            .collect(Collectors.toMap(s -> s, req::getHeader))));
+        }
         chain.doFilter(request, response);
     }
 
