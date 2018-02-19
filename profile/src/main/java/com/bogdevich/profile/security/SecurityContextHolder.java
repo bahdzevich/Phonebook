@@ -1,9 +1,9 @@
-package com.bogdevich.profile.context;
+package com.bogdevich.profile.security;
 
 import java.util.List;
 
 /**
- * Custom realization of security context holder.
+ * Custom realization of security security holder.
  *
  * @author Eugene Bogdevich
  */

@@ -1,4 +1,4 @@
-package com.bogdevich.profile.controller.exception;
+package com.bogdevich.profile.security.exception;
 
 public class PermissionException extends RuntimeException{
 
