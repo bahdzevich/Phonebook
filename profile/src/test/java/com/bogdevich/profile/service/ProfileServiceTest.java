@@ -6,11 +6,9 @@ import com.bogdevich.profile.service.impl.ProfileService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -18,10 +16,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+import static org.mockito.MockitoAnnotations.initMocks;
+
 public class ProfileServiceTest {
 
+    @InjectMocks
     private ProfileService profileService;
 
     @Mock
@@ -29,7 +28,8 @@ public class ProfileServiceTest {
 
     @Before
     public void setup() {
-        profileService = new ProfileService(profileRepository);
+        initMocks(this);
+        //profileService = new ProfileService(profileRepository);
     }
 
     @Test

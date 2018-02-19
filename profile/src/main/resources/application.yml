@@ -1,12 +1,12 @@
 server:
-  port: 9094
+  port: 9096
   context-path: /phonebook/profile-service/api
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/phonebook
     username: root
-    password: qwerty
+    password: root
   jpa:
     hibernate:
       ddl-auto: none

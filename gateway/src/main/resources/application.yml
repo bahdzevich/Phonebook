@@ -32,7 +32,7 @@ zuul:
     profile:
       path: /phonebook/profile-service/api/**
       serviceId: profile
-      stripPrefix: false # needed because of setting context path
+      stripPrefix: false # needed because of setting security path
     news:
       path: /phonebook/news-service/api/**
       serviceId: news

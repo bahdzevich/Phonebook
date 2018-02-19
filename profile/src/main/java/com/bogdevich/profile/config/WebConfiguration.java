@@ -27,7 +27,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
      * The {@link ContentNegotiatingViewResolver} does not resolve views itself,
      * but delegates to other ViewResolvers. By default,
      * these other view resolvers are picked up automatically
-     * from the application context, though they can also be set explicitly
+     * from the application security, though they can also be set explicitly
      * by using the viewResolvers property.
      *
      * @param negotiationManager
