@@ -16,9 +16,9 @@ import javax.validation.constraints.Size;
  * @author Eugene Bogdevich
  */
 public class ProfileRequestDTO {
-    @NotBlank
-    @Email
-    @Size(max = 255)
+    @NotBlank(message = "Email is blank")
+    @Email(message = "Email is not valid")
+    @Size(max = 255, message = "Too much length")
     private String email;
 
     @NotBlank
