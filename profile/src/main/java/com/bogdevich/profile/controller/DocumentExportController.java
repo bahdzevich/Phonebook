@@ -1,6 +1,6 @@
 package com.bogdevich.profile.controller;
 
-import com.bogdevich.profile.controller.util.mapper.ProfileResponseMapper;
+import com.bogdevich.profile.controller.util.mapper.ProfileMapper;
 import com.bogdevich.profile.entity.dto.response.ProfileResponseDTO;
 import com.bogdevich.profile.service.IProfileService;
 import org.slf4j.Logger;
@@ -21,24 +21,24 @@ import java.util.stream.Collectors;
 @Controller
 public class DocumentExportController {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static final Logger LOGGER = LoggerFactory.getLogger(DocumentExportController.class);
 
     private final IProfileService profileService;
-    private final ProfileResponseMapper profileResponseMapper;
+    private final ProfileMapper profileMapper;
 
     @Autowired
     public DocumentExportController(
             IProfileService profileService,
-            ProfileResponseMapper profileResponseMapper) {
+            ProfileMapper profileMapper) {
         this.profileService = profileService;
-        this.profileResponseMapper = profileResponseMapper;
+        this.profileMapper = profileMapper;
     }
 
     @RequestMapping( value = "/csv", method = RequestMethod.GET)
     public void exportProfiles(Model model) throws IOException {
         List<ProfileResponseDTO> profileResponseDTOList = profileService
                 .findAll().stream()
-                .map(profileResponseMapper::profileToDto)
+                .map(profileMapper::profileToDto)
                 .collect(Collectors.toList());
         model.addAttribute("profiles", profileResponseDTOList);
     }

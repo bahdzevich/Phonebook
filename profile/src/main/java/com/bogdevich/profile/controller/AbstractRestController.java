@@ -1,6 +1,7 @@
 package com.bogdevich.profile.controller;
 
-import com.bogdevich.profile.controller.util.mapper.ProfileResponseMapper;
+import com.bogdevich.profile.controller.util.mapper.ProfileMapper;
+import com.bogdevich.profile.controller.util.mapper.ProjectMapper;
 import com.bogdevich.profile.entity.dto.response.ProfileResponseDTO;
 import com.bogdevich.profile.entity.dto.response.ProfilesListDTO;
 import org.slf4j.Logger;
@@ -37,15 +38,15 @@ public abstract class AbstractRestController {
     @Value("${controller.paging.default-size}")
     protected Integer DEFAULT_SIZE;
 
-    @Value("role.admin-role")
-    protected String adminRoleName;
-
-    protected final ProfileResponseMapper profileResponseMapper;
+    protected final ProfileMapper profileMapper;
+    protected final ProjectMapper projectMapper;
 
     @Autowired
     public AbstractRestController(
-            ProfileResponseMapper profileResponseMapper) {
-        this.profileResponseMapper = profileResponseMapper;
+            ProfileMapper profileMapper,
+            ProjectMapper projectMapper) {
+        this.profileMapper = profileMapper;
+        this.projectMapper = projectMapper;
     }
 
     protected ProfilesListDTO createProfileListDto(Page<ProfileResponseDTO> profilesPage) {
@@ -62,6 +63,4 @@ public abstract class AbstractRestController {
                 .filter(predicate)
                 .orElse(def);
     }
-
-    protected abstract <T> void checkPermission(T t);
 }

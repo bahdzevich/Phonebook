@@ -10,9 +10,9 @@ import org.mapstruct.Mapper;
  * @author Eugene Bogdevich
  */
 @Mapper(componentModel = "spring")
-public interface RoleResponseMapper {
+public interface RoleMapper {
 
-    //RoleResponseMapper INSTANCE = Mappers.getMapper(RoleResponseMapper.class);
+    //RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);
 
     RoleResponseDTO roleToDto (Role role);
 

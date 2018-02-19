@@ -27,14 +27,15 @@ public abstract class AbstractCsvView extends AbstractView {
 
     @Override
     protected final void renderMergedOutputModel(
-            Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        response.setContentType(getContentType());
+            Map<String, Object> model, HttpServletRequest request,
+            HttpServletResponse response) throws Exception {
+
+        response.setContentType(this.getContentType());
         buildCsvDocument(model, request, response);
     }
 
 
     protected abstract void buildCsvDocument(
-            Map<String, Object> model, HttpServletRequest request, HttpServletResponse response)
-            throws Exception;
-
+            Map<String, Object> model, HttpServletRequest request,
+            HttpServletResponse response) throws Exception;
 }

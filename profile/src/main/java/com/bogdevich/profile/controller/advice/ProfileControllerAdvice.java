@@ -4,8 +4,7 @@ import com.bogdevich.profile.controller.ProfileRestController;
 import com.bogdevich.profile.controller.ProjectRestController;
 import com.bogdevich.profile.controller.RoleController;
 import com.bogdevich.profile.controller.exception.DataNotFoundException;
-import com.bogdevich.profile.controller.exception.InternalServiceException;
-import com.bogdevich.profile.controller.exception.PermissionException;
+import com.bogdevich.profile.security.exception.PermissionException;
 import com.bogdevich.profile.entity.dto.response.ErrorDTO;
 import com.bogdevich.profile.entity.dto.response.FieldErrorDTO;
 import com.bogdevich.profile.entity.dto.response.MessageDTO;
@@ -60,10 +59,10 @@ public class ProfileControllerAdvice extends ResponseEntityExceptionHandler{
         messageDTO.setStatus(HttpStatus.FORBIDDEN.value());
         messageDTO.setMessage(ex.getMessage());
         messageDTO.setPath(request.getRequestURI());
-        return new ResponseEntity<>(messageDTO, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(messageDTO, HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler(InternalServiceException.class)
+    @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<MessageDTO> handleInternalServiceException(Throwable ex, HttpServletRequest httpServletRequest) {
         LOGGER.warn(ex.getMessage(), ex);
         MessageDTO messageDTO = new MessageDTO();
