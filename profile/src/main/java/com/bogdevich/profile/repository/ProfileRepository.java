@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
-@Repository("profileRepository")
+@Repository
 public interface ProfileRepository extends JpaRepository<Profile, Long>{
     Optional<Profile> findByEmail(String email);
 
@@ -40,5 +41,5 @@ public interface ProfileRepository extends JpaRepository<Profile, Long>{
                     "ON `user_projects`.project_id = `project`.id " +
                     "WHERE `project`.id = ?1 \n#pageable\n",
             nativeQuery = true)
-    Page<Profile> findProfilesByProjectId(Long projectID, Pageable pageable);
+    Page<Profile> findProfilesByProjectId(Long projectID, Pageable pageable) throws SQLException;
 }
