@@ -1,6 +1,6 @@
 package com.bogdevich.profile.filter;
 
-import com.bogdevich.profile.context.SecurityContextHolder;
+import com.bogdevich.profile.security.SecurityContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,36 +47,26 @@ public class PrincipalHeaderFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse resp = (HttpServletResponse) response;
 
-        LOGGER.info(String.format(
-                "REQUEST :: %s %s %s",
-                req.getMethod(),
-                req.getRequestURI(),
-                Collections
-                        .list(req.getHeaderNames())
-                        .stream()
-                        .collect(Collectors.toMap(s -> s, req::getHeader))));
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.info(String.format(
+                    "REQUEST :: %s %s %s", req.getMethod(),
+                    req.getRequestURI(), Collections
+                            .list(req.getHeaderNames())
+                            .stream()
+                            .collect(Collectors.toMap(s -> s, req::getHeader))));
+        }
 
         try {
             Long principalId = Long.parseLong(req.getHeader(this.principalIdHeader));
             String principalName = Objects.requireNonNull(req.getHeader(this.principalNameHeader));
             List<String> principalAuthorityList = Optional
                     .ofNullable(req.getHeader(principalAuthoritiesHeader))
-                    .map(s -> Arrays
-                            .stream(s.split(","))
+                    .map(s -> Arrays.stream(s.split(","))
                             .collect(Collectors.toList()))
                     .orElse(Collections.emptyList());
-
-            LOGGER.info(String.format(
-                    "Setting security context; id:\'%s\', name:\'%s\', authorities:\'%s\'",
-                    principalId,
-                    principalName,
-                    principalAuthorityList));
-
-            SecurityContextHolder.setThreadLocalPrincipalId(principalId);
-            SecurityContextHolder.setThreadLocalPrincipalName(principalName);
-            SecurityContextHolder.setThreadLocalAuthorityList(principalAuthorityList);
+            setSecurityContext(principalId, principalName, principalAuthorityList);
         } catch (Exception ex) {
-            LOGGER.error("Unable to set security context.", ex);
+            LOGGER.error("Unable to set security context", ex);
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, ex.getMessage());
         }
         chain.doFilter(request, response);
@@ -84,5 +74,17 @@ public class PrincipalHeaderFilter implements Filter {
 
     @Override
     public void destroy() {
+    }
+
+    private void setSecurityContext(Long id, String name,
+                                    List<String> authorityList) {
+        SecurityContextHolder.setThreadLocalPrincipalId(id);
+        SecurityContextHolder.setThreadLocalPrincipalName(name);
+        SecurityContextHolder.setThreadLocalAuthorityList(authorityList);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.info(String.format(
+                    "Security context: {id:\'%s\', name:\'%s\', authorities:\'%s\'}",
+                    id, name, authorityList));
+        }
     }
 }
