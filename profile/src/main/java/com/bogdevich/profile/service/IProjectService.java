@@ -15,5 +15,5 @@ public interface IProjectService extends ICrudService<Project> {
      *
      * @return {@link List} of {@link Profile}
      */
-    Optional<Page<Profile>> findProfilesByProjectId(long id, Pageable pageable);
+    Optional<Page<Profile>> findProfilesByProjectId(Pageable pageable, Long id);
 }

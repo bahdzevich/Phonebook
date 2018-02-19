@@ -1,11 +1,8 @@
 package com.bogdevich.profile.service;
 
-import com.bogdevich.profile.controller.exception.DataNotFoundException;
-import com.bogdevich.profile.service.exception.ServiceException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +14,7 @@ import java.util.Optional;
  */
 public interface ICrudService<T> {
 
-    Optional<T> save(T t);
+    T save(T t);
 
     Optional<T> findOne(Long id);
 
@@ -27,5 +24,7 @@ public interface ICrudService<T> {
 
     Optional<T> update(T t, Long id);
 
-    boolean delete(Long id);
+    Optional<T> delete(Long id);
+
+    boolean exists(T t);
 }
