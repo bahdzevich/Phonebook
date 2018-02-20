@@ -33,7 +33,7 @@ services:
     depends_on:
       - discovery
   gateway:
-    image: phonebook/gateway
+    image: phonebook/gateway:latest
     environment:
       - GATEWAY_PORT=9090
       - DISCOVERY_PORT=8761
@@ -43,7 +43,7 @@ services:
     depends_on:
       - auth
   profile:
-    image: phonebook/profile
+    image: phonebook/profile:latest
     environment:
       - PROFILE_PORT=9096
       - DATABASE_HOST=phonebook_phonebook-mysql_1
@@ -57,5 +57,8 @@ services:
       - 9096:9096
     depends_on:
       - gateway
+  news:
+    image: news/phonebook:latest
+    ports: 9095:9095
 volumes:
   phonebook-volume:
