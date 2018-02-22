@@ -59,6 +59,9 @@ services:
       - gateway
   news:
     image: news/phonebook:latest
-    ports: 9095:9095
+    depends_on: 
+      - gateway
+    ports: 
+      - 9095:9095
 volumes:
   phonebook-volume:

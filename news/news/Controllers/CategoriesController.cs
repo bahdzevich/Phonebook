@@ -11,7 +11,7 @@ using news.Repositories;
 namespace news.Controllers
 {
     [Produces("application/json")]
-    [Route("phonebook/v1/api/categories")]
+    [Route("phonebook/news-service/api/categories")]
     public class CategoriesController : Controller
     {
         private readonly CategoryContext _context;

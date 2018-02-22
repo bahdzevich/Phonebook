@@ -40,7 +40,7 @@ namespace news
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            String connectionString = "server=localhost;userid=root;pwd=root;port=3306;database=phonebook;sslmode=none;";
+            String connectionString = "server=phonebook_phonebook-mysql_1;userid=root;pwd=qwerty;port=3306;database=phonebook;sslmode=none;";
             services.AddDbContext<NewsContext>(options => options.UseMySQL(connectionString));
             services.AddDbContext<CategoryContext>(options => options.UseMySQL(connectionString));
 
